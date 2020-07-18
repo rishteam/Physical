@@ -12,6 +12,10 @@ void World::CreatPolygonBody(Point center, std::vector<Point> v){
     m_bodies.push_back(new PolygonBody(center,v));
 }
 
+void World::CreatBody(Body *B){
+    m_bodies.push_back(B);
+}
+
 void World::DisplaySFML(sf::RenderWindow &window){
 
     for( auto &B : m_bodies ){
@@ -24,7 +28,7 @@ Point World::SupportFun(Body* A, Body* B, Vec D){
     
     Point PA = A->supportPoint(D);
     Point PB = B->supportPoint(-D);
-    printf("PA: %lf, %lf PB: %lf, %lf D: %lf, %lf\n",PA.m_x,PA.m_y,PB.m_x,PB.m_y,D.m_x,D.m_y);
+    // printf("PA: %lf, %lf PB: %lf, %lf D: %lf, %lf\n",PA.m_x,PA.m_y,PB.m_x,PB.m_y,D.m_x,D.m_y);
     return PA-PB;
 
 }
@@ -37,7 +41,7 @@ bool World::Cross(Vec A, Vec B){
 
 bool World::GJKcollision(Body* A, Body* B){
 
-    printf("start\n");
+    // printf("start\n");
 
     int PointNum = 0;
     Point Simplex[3];
@@ -47,7 +51,8 @@ bool World::GJKcollision(Body* A, Body* B){
     Simplex[PointNum++] = SupportFun(A, B, D);
     Simplex[PointNum++] = SupportFun(A, B, -D);
 
-    while( true ){
+    int cnt = 1000;
+    while( cnt-- > 0 ){
 
         Vec V(Simplex[0],Simplex[1]);
         if( Cross( V, -Vec(Simplex[0]) ) )
@@ -56,10 +61,10 @@ bool World::GJKcollision(Body* A, Body* B){
 
         Simplex[PointNum++] = SupportFun(A, B, D);
 
-        printf("A: %.0lf, %.0lf\n", Simplex[2].m_x, Simplex[2].m_y);
-        printf("B: %.0lf, %.0lf\n", Simplex[1].m_x, Simplex[1].m_y);
-        printf("C: %.0lf, %.0lf\n", Simplex[0].m_x, Simplex[0].m_y);
-        printf("-----\n");
+        // printf("A: %.0lf, %.0lf\n", Simplex[2].m_x, Simplex[2].m_y);
+        // printf("B: %.0lf, %.0lf\n", Simplex[1].m_x, Simplex[1].m_y);
+        // printf("C: %.0lf, %.0lf\n", Simplex[0].m_x, Simplex[0].m_y);
+        // printf("-----\n");
 
         Vec AB = (Simplex[2], Simplex[1]);
         Vec AC = (Simplex[2], Simplex[0]);
@@ -89,5 +94,28 @@ bool World::GJKcollision(Body* A, Body* B){
         return false;
     }
 
+    return false;
+
 }
 
+void World::checkCollision(){
+
+    for(auto i : m_bodies )
+        i->changeColor(sf::Color::White);
+
+    for(int i = 0 ; i < m_bodies.size() ; i++ ){
+        for(int j = i+1 ; j < m_bodies.size() ; j++ ){
+            if( GJKcollision(m_bodies[i],m_bodies[j]) ){
+                m_bodies[i]->changeColor(sf::Color::Red);
+                m_bodies[j]->changeColor(sf::Color::Red);
+            }
+        }
+    }
+
+}
+
+void World::update(){
+
+    checkCollision();
+
+}

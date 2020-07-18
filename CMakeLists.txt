@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(Physical)
+project(Physical
+  LANGUAGES CXX
+)
 
 ## If you want to link SFML statically
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -10,7 +12,9 @@ set(SFML_STATIC_LIBRARIES TRUE)
 ## In most cases better set in the CMake cache
 set(SFML_DIR "/mingw32/lib/cmake/SFML")
 
-find_package(SFML 2.5 COMPONENTS graphics audio window REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics system window REQUIRED)
+find_package(ImGui-SFML REQUIRED)
+
 add_executable(Physical
 	src/main.cpp
 	src/body.cpp
@@ -20,4 +24,10 @@ add_executable(Physical
 	inc/world.h
 )
 target_include_directories(Physical PRIVATE "inc")
-target_link_libraries(Physical sfml-graphics sfml-audio)
+target_link_libraries(Physical
+	ImGui-SFML::ImGui-SFML
+	sfml-graphics
+	sfml-system
+	sfml-audio
+	sfml-window
+)

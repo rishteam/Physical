@@ -17,8 +17,20 @@ struct Point {
         return Point(m_x + rhs.m_x, m_y + rhs.m_y);
     }
 
+    Point operator+=(const Point &rhs){
+        m_x += rhs.m_x;
+        m_y += rhs.m_y;
+        return *this;
+    }
+
     Point operator-(const Point &rhs){
         return Point(m_x - rhs.m_x, m_y - rhs.m_y);
+    }
+
+    Point operator-=(const Point &rhs){
+        m_x -= rhs.m_x;
+        m_y -= rhs.m_y;
+        return *this;
     }
 
     Point operator-() const{
