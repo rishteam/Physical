@@ -25,17 +25,21 @@ int main()
 
 	World worldTest;
 	
+	float S = 5.0f;
+
 	std::vector<Point> A;
-	A.push_back(Point(  0, 500));
-	A.push_back(Point(200,   0));
-	A.push_back(Point(400,   0));
-	worldTest.CreatPolygonBody(Point(0, 0), A);
+	A.push_back(Point( 0*S, 50*S));
+	A.push_back(Point(20*S,  0*S));
+	A.push_back(Point(40*S,  0*S));
+	worldTest.CreatPolygonBody(Point(640, 360), A);
+
+	worldTest.CreatRectBody(Point(600,350),50*S,5*S);
 
 	std::vector<Point> B;
-	B.push_back(Point(   0, 400));
-	B.push_back(Point(-100, 200));
-	B.push_back(Point( 100, 200));
-	worldTest.CreatPolygonBody(Point(0, 0), B);
+	B.push_back(Point(  0*S, 40*S));
+	B.push_back(Point(-10*S, 20*S));
+	B.push_back(Point( 10*S, 20*S));
+	worldTest.CreatPolygonBody(Point(640, 360), B);
 
 	Body* MMouse  = new CircleBody(Point(0,0), 30);
 	worldTest.CreatBody(MMouse);
@@ -62,33 +66,41 @@ int main()
 		}
 		ImGui::SFML::Update(window, deltaClock.restart());
 
-		static float position[2];
-		static float WH[2];
-		static float hight = 0.0f;
-		static float radius = 0.0f;
+		static float position[2] = {640,360};
+		static float WH[2] = {100,10};
+		static float hight = 10.0f;
+		static float radius = 10.0f;
+		static float angle = 10.0f;
 		static bool previewCirC = false;
 		static bool previewRact = false;
 
 		ImGui::Begin("CreateBody");
 		ImGui::SliderFloat2("Position", position, 0.0f, 1280.0f);
 		ImGui::SliderFloat2("Weight, Height", WH, 10.0f, 300.0f);
-		ImGui::SliderFloat("Radius",&radius, 1.0f, 100.0f);
-		ImGui::Checkbox("Preview CirCle", &previewCirC); ImGui::SameLine();
-		if( ImGui::Button("Create CirCle") ){
-			worldTest.CreatCircleBody(Point(position[0],position[1]),radius);
+		ImGui::SliderFloat("Radius", &radius, 1.0f, 100.0f);
+		ImGui::SliderFloat("Angle", &angle, -360.0f, 360.0f);
+		ImGui::Checkbox("Preview CirCle", &previewCirC);
+		ImGui::SameLine();
+		if (ImGui::Button("Create CirCle")){
+			worldTest.CreatCircleBody(Point(position[0], position[1]), radius, angle);
 		}
 
-		ImGui::Checkbox("Preview Ract", &previewRact); ImGui::SameLine();
-		if( ImGui::Button("Create Ract") ){
-			worldTest.CreatRectBody(Point(position[0],position[1]),WH[0],WH[1]);
+		ImGui::Checkbox("Preview Ract", &previewRact);
+		ImGui::SameLine();
+		if (ImGui::Button("Create Ract")){
+			worldTest.CreatRectBody(Point(position[0], position[1]), WH[0], WH[1], angle);
 		}
 		ImGui::End();
 
-		CS.setPosition(sf::Vector2f(position[0]-radius,position[1]-radius));
+		CS.setPosition(sf::Vector2f(position[0] - radius, position[1] - radius));
 		CS.setRadius(radius);
 
-		RS.setPosition(sf::Vector2f(position[0] - WH[0]/2, position[1] - WH[1]/2));
-		RS.setSize(sf::Vector2f(WH[0],WH[1]));
+
+		RS.setRotation(angle);
+		Point R(position[0] - WH[0] / 2, position[1] - WH[1] / 2);
+		R = R.Rotate(Point(position[0],position[1]),angle);
+		RS.setPosition(sf::Vector2f(R.m_x,R.m_y));
+		RS.setSize(sf::Vector2f(WH[0], WH[1]));
 
 		Point M(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 		MMouse->setCenter(M);

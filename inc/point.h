@@ -1,5 +1,5 @@
 #pragma once
-
+#include <math.h>
 
 // struct Vec;
 struct Point {
@@ -35,6 +35,21 @@ struct Point {
 
     Point operator-() const{
         return Point(-m_x, -m_y);
+    }
+
+    Point Rotate(Point base, float angle){
+
+        Point RotatedPoint,tmp;
+        float radian = angle*M_PI/180;
+        
+        tmp = *this - base;
+        RotatedPoint.m_x = tmp.m_x*cos(radian) - tmp.m_y*sin(radian);
+        RotatedPoint.m_y = tmp.m_x*sin(radian) + tmp.m_y*cos(radian);
+
+        RotatedPoint += base;
+
+        return RotatedPoint;
+
     }
 
     // void MoveVec(Vec V){

@@ -13,9 +13,9 @@ public:
             delete i;
     }
 
-    void CreatCircleBody(Point center, float radius);
-    void CreatRectBody(Point center, float width, float height);
-    void CreatPolygonBody(Point center, std::vector<Point> v);
+    void CreatCircleBody(Point center, float radius, float angle = 0.0f);
+    void CreatRectBody(Point center, float width, float height, float angle = 0.0f);
+    void CreatPolygonBody(Point center, std::vector<Point> v, float angle = 0.0f);
     void CreatBody(Body* B);
 
     Point SupportFun(Body *A, Body *B, Vec D);

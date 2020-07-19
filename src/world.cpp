@@ -1,15 +1,15 @@
 #include "world.h"
 
-void World::CreatCircleBody(Point center, float radius){
-    m_bodies.push_back(new CircleBody(center,radius));
+void World::CreatCircleBody(Point center, float radius, float angle){
+    m_bodies.push_back(new CircleBody(center,radius,angle));
 }
 
-void World::CreatRectBody(Point center, float width, float height){
-    m_bodies.push_back(new RectBody(center, width, height));
+void World::CreatRectBody(Point center, float width, float height, float angle){
+    m_bodies.push_back(new RectBody(center, width, height,angle));
 }
 
-void World::CreatPolygonBody(Point center, std::vector<Point> v){
-    m_bodies.push_back(new PolygonBody(center,v));
+void World::CreatPolygonBody(Point center, std::vector<Point> v, float angle){
+    m_bodies.push_back(new PolygonBody(center,v,angle));
 }
 
 void World::CreatBody(Body *B){
@@ -116,6 +116,8 @@ void World::checkCollision(){
 
 void World::update(){
 
+    m_bodies[0]->Roate(1);
+    m_bodies[1]->Roate(1);
     checkCollision();
 
 }
