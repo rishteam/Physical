@@ -18,9 +18,11 @@ find_package(ImGui-SFML REQUIRED)
 add_executable(Physical
 	src/main.cpp
 	src/body.cpp
+	src/quadtree.cpp
 	src/world.cpp
 	inc/point.h
 	inc/body.h
+	inc/quadtree.h
 	inc/world.h
 )
 target_include_directories(Physical PRIVATE "inc")

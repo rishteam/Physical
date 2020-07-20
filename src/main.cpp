@@ -14,35 +14,38 @@
 #define WINDOW_HEIGHT 720
 #define WINDOW_NAME "Physical"
 
-int main()
-{
-	
+int main(){
+
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), WINDOW_NAME);
 	window.setFramerateLimit(60);
 	ImGui::SFML::Init(window);
 
 	sf::Clock deltaClock;
 
-	World worldTest;
+	World worldTest(WINDOW_WIDTH,WINDOW_HEIGHT);
 	
-	float S = 5.0f;
+	// float S = 5.0f;
 
-	std::vector<Point> A;
-	A.push_back(Point( 0*S, 50*S));
-	A.push_back(Point(20*S,  0*S));
-	A.push_back(Point(40*S,  0*S));
-	worldTest.CreatPolygonBody(Point(640, 360), A);
+	// std::vector<Point> A;
+	// A.push_back(Point( 0*S, 50*S));
+	// A.push_back(Point(20*S,  0*S));
+	// A.push_back(Point(40*S,  0*S));
+	// worldTest.CreatPolygonBody(Point(640, 360), A);
 
-	worldTest.CreatRectBody(Point(600,350),50*S,5*S);
+	// worldTest.CreatRectBody(Point(600,350),50*S,5*S);
 
-	std::vector<Point> B;
-	B.push_back(Point(  0*S, 40*S));
-	B.push_back(Point(-10*S, 20*S));
-	B.push_back(Point( 10*S, 20*S));
-	worldTest.CreatPolygonBody(Point(640, 360), B);
+	// S = 1.0f;
+	// std::vector<Point> B;
+	// B.push_back(Point(   0*S,  40*S));
+	// B.push_back(Point(  20*S,  20*S));
+	// B.push_back(Point(  30*S, -20*S));
+	// worldTest.CreatPolygonBody(Point(640, 360), B);
 
-	Body* MMouse  = new CircleBody(Point(0,0), 30);
-	worldTest.CreatBody(MMouse);
+	int MAXN = 10;
+	srand( time(NULL) );
+	
+	// Body* MMouse  = new CircleBody(Point(0,0), 10);
+	// worldTest.CreatBody(MMouse);
 
 	sf::CircleShape CS;
 	sf::RectangleShape RS;
@@ -90,6 +93,14 @@ int main()
 		if (ImGui::Button("Create Ract")){
 			worldTest.CreatRectBody(Point(position[0], position[1]), WH[0], WH[1], angle);
 		}
+		if ( ImGui::Button("Random 10 rect") ){
+			for (int i = 0; i < MAXN; i++){
+				worldTest.CreatRectBody(
+					Point(rand() % 1280, rand() % 720),
+					rand() % 100, rand() % 100, rand() % 360);
+			}
+		}
+		ImGui::Text("%d",worldTest.BodySize());
 		ImGui::End();
 
 		CS.setPosition(sf::Vector2f(position[0] - radius, position[1] - radius));
@@ -102,8 +113,8 @@ int main()
 		RS.setPosition(sf::Vector2f(R.m_x,R.m_y));
 		RS.setSize(sf::Vector2f(WH[0], WH[1]));
 
-		Point M(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-		MMouse->setCenter(M);
+		// Point M(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+		// MMouse->setCenter(M);
 
 		window.clear();
 

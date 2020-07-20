@@ -96,6 +96,12 @@ struct Vec {
         return m_x * A.m_x + m_y * A.m_y;
     }
 
+    bool Cross(Vec A){
+        if( m_x * A.m_y - m_y * A.m_x > 0.0f)
+            return true;
+        return false;
+    }
+
 };
 
 // Point operator+(const Point &lhs, const Vec &rhs){
