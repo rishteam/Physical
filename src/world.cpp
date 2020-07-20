@@ -112,16 +112,16 @@ void World::checkCollision(){
 
     // O(n^2)
     clock_t startA,endA,startB,endB;
-    startA = clock();
-    for(int i = 0 ; i < m_bodies.size() ; i++ ){
-        for(int j = i+1 ; j < m_bodies.size() ; j++ ){
-            if( GJKcollision(m_bodies[i],m_bodies[j]) ){
-                m_bodies[i]->changeColor(sf::Color::Red);
-                m_bodies[j]->changeColor(sf::Color::Red);
-            }
-        }
-    }
-    endA = clock();
+    // startA = clock();
+    // for(int i = 0 ; i < m_bodies.size() ; i++ ){
+    //     for(int j = i+1 ; j < m_bodies.size() ; j++ ){
+    //         if( GJKcollision(m_bodies[i],m_bodies[j]) ){
+    //             m_bodies[i]->changeColor(sf::Color::Red);
+    //             m_bodies[j]->changeColor(sf::Color::Red);
+    //         }
+    //     }
+    // }
+    // endA = clock();
     startB = clock();
     for(int i = 0 ; i < m_bodies.size() ; i++ ){
 
@@ -141,7 +141,7 @@ void World::checkCollision(){
     }
     endB = clock();
 
-    printf("%ld, %ld\n",endA-startA,endB-startB);
+    // printf("%ld, %ld\n",endA-startA,endB-startB);
 
 }
 
