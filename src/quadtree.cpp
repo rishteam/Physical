@@ -43,19 +43,14 @@ void QuadTree::insert(Point P, int idx){
         return;
     // printf("insert %lf, %lf\n",P.m_x,P.m_y);
 
-    if( m_data.size() < m_capacity ){
-        m_data.push_back(P);
-        m_dataIdx.push_back(idx);
-    }
-    else{
+    m_data.push_back(P);
+    m_dataIdx.push_back(idx);
+    
+    if( m_data.size() > m_capacity ){
         subdivide();
         if( m_child[0] ){
             for(int i = 0 ; i < 4 ; i++ )
                 m_child[i]->insert(P,idx);
-        }
-        else{
-            m_data.push_back(P);
-            m_dataIdx.push_back(idx);
         }
     }
 
@@ -65,9 +60,9 @@ void QuadTree::insert(Point P, int idx){
 
 bool QuadTree::contain(Point P){
 
-    P -= (m_center-Point(m_width/2,m_height/2));
+    Point PP = P - (m_center - Point(m_width / 2, m_height / 2));
     // printf("%lf, %lf --- ",P.m_x,P.m_y);
-    if( P.m_x < 0 || P.m_y < 0 )
+    if( PP.m_x < 0 || PP.m_y < 0 )
         return false;
 
     Point tmp = (m_center + Point(m_width / 2, m_height / 2));
@@ -170,8 +165,12 @@ void QuadTree::subdivide(){
         m_center + Point(-W/2,  H/2)
     };
 
-    for(int i = 0 ; i < 4 ; i++ )
+    for(int i = 0 ; i < 4 ; i++ ){
         m_child[i] = new QuadTree(center[i],W,H);
+        for(int j = 0 ; j < m_data.size()-1 ; j++ )
+            m_child[i]->insert(m_data[j],m_dataIdx[j]);
+    }
+
 
 }
 
@@ -180,13 +179,13 @@ std::vector<int>& QuadTree::query(std::vector<int> &V, Body *B){
     if( !contain(B) )
         return V;
 
-    for(auto i : m_dataIdx )
-        V.push_back(i);
-
     // printf("In: %d\n",V.size());
 
-    if( m_child[0] == nullptr )
+    if( m_child[0] == nullptr ){
+        for(auto i : m_dataIdx )
+            V.push_back(i);
         return V;
+    }
 
     for(int i = 0 ; i < 4 ; i++ ){
         m_child[i]->query(V,B);

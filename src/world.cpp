@@ -111,7 +111,7 @@ void World::checkCollision(){
         i->changeColor(sf::Color::White);
 
     // O(n^2)
-    clock_t startA,endA,startB,endB;
+    // clock_t startA,endA,startB,endB;
     // startA = clock();
     // for(int i = 0 ; i < m_bodies.size() ; i++ ){
     //     for(int j = i+1 ; j < m_bodies.size() ; j++ ){
@@ -122,7 +122,7 @@ void World::checkCollision(){
     //     }
     // }
     // endA = clock();
-    startB = clock();
+    // startB = clock();
     for(int i = 0 ; i < m_bodies.size() ; i++ ){
 
         std::vector <int> V;
@@ -139,7 +139,7 @@ void World::checkCollision(){
         }
 
     }
-    endB = clock();
+    // endB = clock();
 
     // printf("%ld, %ld\n",endA-startA,endB-startB);
 
@@ -151,5 +151,7 @@ void World::update(){
         i->Roate(1);
 
     checkCollision();
+
+    // QT.imguiDebug();
 
 }
