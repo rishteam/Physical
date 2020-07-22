@@ -52,6 +52,9 @@ int main(){
 	CS.setFillColor(sf::Color(0xAA, 0xAA, 0xAA));
 	RS.setFillColor(sf::Color(0xAA, 0xAA, 0xAA));
 
+	sf::Clock clk;
+	int cnt = 0, fps = 0;
+
 	// Start the game loop
 	while (window.isOpen()){
 		// Process events
@@ -101,6 +104,13 @@ int main(){
 			}
 		}
 		ImGui::Text("%d",worldTest.BodySize());
+		if(clk.getElapsedTime().asSeconds() >= 1.f)
+        {
+		    fps = cnt;
+		    cnt = 0;
+		    clk.restart();
+        }
+		ImGui::Text("FPS = %d", fps);
 		ImGui::End();
 
 		CS.setPosition(sf::Vector2f(position[0] - radius, position[1] - radius));
@@ -130,6 +140,7 @@ int main(){
 		ImGui::SFML::Render(window);
 
 		window.display();
+		cnt++;
 
 	}
 

@@ -124,7 +124,6 @@ void World::checkCollision(){
     // endA = clock();
     // startB = clock();
     for(int i = 0 ; i < m_bodies.size() ; i++ ){
-
         std::vector <int> V;
         V.clear();
 
