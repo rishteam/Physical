@@ -74,77 +74,26 @@ bool QuadTree::contain(Point P){
 
 }
 
-bool QuadTree::contain(Body* B){// use GJK
+bool QuadTree::contain(Body* B){// use AABB
 
-    Body* A = new RectBody(m_center,m_width,m_height);
+    auto WH = B->getBoundaryWH();
 
-    int PointNum = 0;
-    Point Simplex[3];
-    Vec D(A->getCenter(), B->getCenter());
-    if (D.m_x == 0 && D.m_y == 0)
-        D = Vec(1.0, 0.0);
-    Simplex[PointNum++] = SupportFun(A, B, D);
-    Simplex[PointNum++] = SupportFun(A, B, -D);
+    float minAx = m_center.m_x - m_width / 2,
+          maxAx = m_center.m_x + m_width / 2,
+          minAy = m_center.m_y - m_height / 2,
+          maxAy = m_center.m_y + m_height / 2;
+    float minBx = B->getCenter().m_x - WH.first / 2,
+          maxBx = B->getCenter().m_x + WH.first / 2,
+          minBy = B->getCenter().m_y - WH.second / 2,
+          maxBy = B->getCenter().m_y + WH.second / 2;
 
-    while (true){
+    // printf("%lf %lf %lf %lf\n", minAx, maxAx, minAy, maxAy);
+    // printf("%lf %lf %lf %lf\n", minBx, maxBx, minBy, maxBy);
+    // printf("-----\n");
 
-        Vec V(Simplex[0], Simplex[1]);
-        if ( V.Cross( -Vec(Simplex[0])))
-            D = Vec(-V.m_y, V.m_x);
-        else
-            D = Vec(V.m_y, -V.m_x);
+    return( maxAx > minBx && maxBx > minAx &&
+            maxAy > minBy && maxBy > minAy );
 
-        Simplex[PointNum++] = SupportFun(A, B, D);
-
-        if (Vec(Simplex[2]).InnerProduct(D) < 0){
-            delete A;
-            return false;
-        }
-
-        Vec AB = (Simplex[2], Simplex[1]);
-        Vec AC = (Simplex[2], Simplex[0]);
-
-        Vec DAB, DAC;
-        if ( AB.Cross( -Vec(Simplex[2])))
-            DAB = Vec(-AB.m_y, AB.m_x);
-        else
-            DAB = Vec(AB.m_y, -AB.m_x);
-
-        if ( AC.Cross( -Vec(Simplex[2])))
-            DAC = Vec(-AC.m_y, AC.m_x);
-        else
-            DAC = Vec(AC.m_y, -AC.m_x);
-
-        if (DAB.InnerProduct(AC) >= 0.0f){
-            if (DAC.InnerProduct(AB) >= 0.0f){
-                delete A;
-                return true;
-            }
-            Simplex[1] = Simplex[2];
-            PointNum--;
-            continue;
-        }
-        if (DAC.InnerProduct(AB) >= 0.0f){
-            Simplex[0] = Simplex[2];
-            PointNum--;
-            continue;
-        }
-
-        break;
-
-    }
-
-    delete A;
-    return false;
-
-}
-
-Point QuadTree::SupportFun(Body *A, Body *B, Vec D){
-
-    Point PA = A->supportPoint(D);
-    Point PB = B->supportPoint(-D);
-    // printf("PA: %lf, %lf PB: %lf, %lf D: %lf, %lf\n",PA.m_x,PA.m_y,PB.m_x,PB.m_y,D.m_x,D.m_y);
-    return PA - PB;
 }
 
 void QuadTree::subdivide(){

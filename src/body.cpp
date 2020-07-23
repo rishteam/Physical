@@ -37,40 +37,6 @@ PolygonBody::PolygonBody(Point center, std::vector<Point> v, float angle){
 
 }
 
-void CircleBody::drawSFML(sf::RenderWindow &window){
-
-    m_shape.setPosition(sf::Vector2f(m_center.m_x - m_radius, m_center.m_y - m_radius));
-    m_shape.setRadius(m_radius);
-
-    window.draw(m_shape);
-}
-
-void RectBody::drawSFML(sf::RenderWindow &window){
-
-    Point R(m_center.m_x - m_width / 2, m_center.m_y - m_height / 2);
-    R = R.Rotate(m_center,m_angle);
-    m_shape.setPosition(sf::Vector2f(R.m_x,R.m_y));
-    m_shape.setSize(sf::Vector2f(m_width, m_height));
-    m_shape.setRotation(m_angle);
-
-    window.draw(m_shape);
-}
-
-void PolygonBody::drawSFML(sf::RenderWindow &window){
-    
-    m_shape.setPosition(0, 0);
-    m_shape.setPointCount(m_vec.size());
-    for (int i = 0; i < m_vec.size(); i++)
-    {
-        Point P = (m_center + m_vec[i]).Rotate(m_center,m_angle);
-        m_shape.setPoint(i, sf::Vector2f(P.m_x, P.m_y));
-    }
-    //m_shape.setRotation(m_angle);
-
-    window.draw(m_shape);
-
-}
-
 Point CircleBody::supportPoint(Vec D){
 
     float K = sqrt(m_radius*m_radius/(D.m_x*D.m_x+D.m_y*D.m_y));
@@ -123,3 +89,85 @@ Point PolygonBody::supportPoint(Vec D){
 
 }
 
+std::pair<float, float> CircleBody::getBoundaryWH(){
+    return std::make_pair(m_radius,m_radius);
+}
+
+std::pair<float, float> RectBody::getBoundaryWH(){
+    
+    Point tmp[4] = {
+        Point(m_center.m_x - m_width / 2, m_center.m_y - m_height / 2),
+        Point(m_center.m_x - m_width / 2, m_center.m_y + m_height / 2),
+        Point(m_center.m_x + m_width / 2, m_center.m_y - m_height / 2),
+        Point(m_center.m_x + m_width / 2, m_center.m_y + m_height / 2)
+    };
+
+    float maxW,maxH,minW,minH;
+    minW = minH = 1e8;
+    for(int i = 0 ; i < 4 ; i++ ){
+        tmp[i] = tmp[i].Rotate(m_center,m_angle);
+        maxW = std::max(maxW, tmp[i].m_x);
+        maxH = std::max(maxH, tmp[i].m_y);
+        minW = std::min(minW, tmp[i].m_x);
+        minH = std::min(minH, tmp[i].m_y);
+        // printf("X: %lf %lf, Y: %lf %lf\n", minW, maxW, minH, maxH);
+    }
+    // printf("---\n");
+
+    return std::make_pair(maxW-minW,maxH-minH);
+
+}
+
+std::pair<float, float> PolygonBody::getBoundaryWH(){
+
+    float maxW, maxH, minW, minH;
+    for(int i = 0 ; i < m_vec.size() ; i++ ){
+        Point P = (m_center + m_vec[i]).Rotate(m_center, m_angle);
+        maxW = std::max(maxW, P.m_x);
+        maxH = std::max(maxH, P.m_y);
+        minW = std::min(minW, P.m_x);
+        minH = std::min(minH, P.m_y);
+
+        // printf("X: %lf %lf, Y: %lf %lf\n", minW,maxW,minH,maxH);
+    }
+    // printf("---\n");
+
+    return std::make_pair(maxW - minW, maxH - minH);
+
+}
+
+// SFML
+void CircleBody::drawSFML(sf::RenderWindow &window){
+
+    m_shape.setPosition(sf::Vector2f(m_center.m_x - m_radius, m_center.m_y - m_radius));
+    m_shape.setRadius(m_radius);
+
+    window.draw(m_shape);
+}
+
+void RectBody::drawSFML(sf::RenderWindow &window){
+
+    Point R(m_center.m_x - m_width / 2, m_center.m_y - m_height / 2);
+    R = R.Rotate(m_center,m_angle);
+    m_shape.setPosition(sf::Vector2f(R.m_x,R.m_y));
+    m_shape.setSize(sf::Vector2f(m_width, m_height));
+    m_shape.setRotation(m_angle);
+
+    window.draw(m_shape);
+
+}
+
+void PolygonBody::drawSFML(sf::RenderWindow &window){
+    
+    m_shape.setPosition(0, 0);
+    m_shape.setPointCount(m_vec.size());
+    for (int i = 0; i < m_vec.size(); i++)
+    {
+        Point P = (m_center + m_vec[i]).Rotate(m_center,m_angle);
+        m_shape.setPoint(i, sf::Vector2f(P.m_x, P.m_y));
+    }
+    //m_shape.setRotation(m_angle);
+
+    window.draw(m_shape);
+
+}

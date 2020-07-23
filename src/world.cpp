@@ -151,6 +151,6 @@ void World::update(){
 
     checkCollision();
 
-    // QT.imguiDebug();
+    QT.imguiDebug();
 
 }

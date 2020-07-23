@@ -24,7 +24,7 @@ int main(){
 
 	World worldTest(WINDOW_WIDTH,WINDOW_HEIGHT);
 	
-	// float S = 5.0f;
+	float S = 5.0f;
 
 	// std::vector<Point> A;
 	// A.push_back(Point( 0*S, 50*S));

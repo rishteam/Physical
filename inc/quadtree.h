@@ -26,8 +26,7 @@ public:
     bool contain(Body* B);
     void subdivide();
 
-    std::vector <int>& query(std::vector<int> &V, Body* B); 
-    Point SupportFun(Body* A, Body* B, Vec D);
+    std::vector <int>& query(std::vector<int> &V, Body* B);
 
     void imguiDebug()
     {

@@ -16,6 +16,9 @@ public:
 	virtual Point supportPoint(Vec D){
 		return Point();
 	};
+	virtual std::pair<float, float> getBoundaryWH(){
+		return std::make_pair(getCenter().m_x, getCenter().m_y);
+	}
 
 	Point getCenter(){
 		return m_center;
@@ -61,7 +64,8 @@ public:
 	CircleBody(Point center, float radius, float angle = 0.0f);
 
 	virtual Point supportPoint(Vec D) override;
-	
+	virtual std::pair<float, float> getBoundaryWH() override;
+
 	//SFML
 	virtual void drawSFML(sf::RenderWindow &window) override;
 	virtual void changeColor(sf::Color color) override {
@@ -82,6 +86,7 @@ public:
 	RectBody(Point center, float width, float height, float angle = 0.0f);
 
 	virtual Point supportPoint(Vec D) override;
+	virtual std::pair<float, float> getBoundaryWH() override;
 
 	//SFML
 	virtual void drawSFML(sf::RenderWindow &window) override;
@@ -103,6 +108,7 @@ public:
 	PolygonBody(Point center, std::vector<Point> v, float angle = 0.0f);
 
 	virtual Point supportPoint(Vec D) override;
+	virtual std::pair<float, float> getBoundaryWH() override;
 
 	//SFML
 	virtual void drawSFML(sf::RenderWindow &window) override;
