@@ -147,7 +147,7 @@ void World::checkCollision(){
 void World::update(){
 
     for(auto i : m_bodies)
-        i->Roate(1);
+        i->Roate(1);//rotate
 
     checkCollision();
 

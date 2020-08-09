@@ -123,24 +123,24 @@ void QuadTree::subdivide(){
 
 }
 
-std::vector<int>& QuadTree::query(std::vector<int> &V, Body *B){
+void QuadTree::query(std::vector<int> &V, Body *B){
 
     if( !contain(B) )
-        return V;
+        return;
 
     // printf("In: %d\n",V.size());
 
     if( m_child[0] == nullptr ){
         for(auto i : m_dataIdx )
             V.push_back(i);
-        return V;
+        return;
     }
 
     for(int i = 0 ; i < 4 ; i++ ){
         m_child[i]->query(V,B);
     }
 
-    return V;
+    return;
 }
 
 void QuadTree::drawSFML(sf::RenderWindow &window){

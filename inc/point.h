@@ -97,11 +97,24 @@ struct Vec {
     }
 
     bool Cross(Vec A){
+        // vec is same side with A or not
         if( m_x * A.m_y - m_y * A.m_x > 0.0f)
             return true;
         return false;
     }
 
+    Vec Rotate(float angle){
+
+        Vec RotatedVec, tmp;
+        float radian = angle * M_PI / 180;
+
+        tmp = *this;
+        RotatedVec.m_x = tmp.m_x * cos(radian) - tmp.m_y * sin(radian);
+        RotatedVec.m_y = tmp.m_x * sin(radian) + tmp.m_y * cos(radian);
+
+        return RotatedPoint;
+    }
+    
 };
 
 // Point operator+(const Point &lhs, const Vec &rhs){

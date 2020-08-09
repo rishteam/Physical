@@ -20,30 +20,12 @@ public:
 		return std::make_pair(getCenter().m_x, getCenter().m_y);
 	}
 
-	Point getCenter(){
-		return m_center;
-	}
-	void setCenter(Point center){
-		m_center = center;
-	};
+	Point getCenter();
+	void setCenter(Point center);
 
-	float getAngle(){
-		return m_angle;
-	}
-	void setAngle(float angle){
-		m_angle = angle;
-		while( m_angle > 360 )
-			m_angle -= 360;
-		while( m_angle < -360 )
-			m_angle += 360;
-	}
-	void Roate(float angle){
-		m_angle += angle;
-		while (m_angle > 360)
-			m_angle -= 360;
-		while (m_angle < -360)
-			m_angle += 360;
-	}
+	float getAngle();
+	void setAngle(float angle);
+	void Roate(float angle);
 
 	//SFML
 	virtual void drawSFML(sf::RenderWindow &window){};

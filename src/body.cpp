@@ -5,6 +5,31 @@ Body::Body(Point center, float angle){
     m_angle = angle;
 }
 
+Point Body::getCenter(){
+    return m_center;
+}
+void Body::setCenter(Point center){
+    m_center = center;
+};
+
+float Body::getAngle(){
+    return m_angle;
+}
+void Body::setAngle(float angle){
+    m_angle = angle;
+    while (m_angle > 360)
+        m_angle -= 360;
+    while (m_angle < -360)
+        m_angle += 360;
+}
+void Body::Roate(float angle){
+    m_angle += angle;
+    while (m_angle > 360)
+        m_angle -= 360;
+    while (m_angle < -360)
+        m_angle += 360;
+}
+
 CircleBody::CircleBody(Point center, float radius, float angle){
     m_center = center;
     m_radius = radius;

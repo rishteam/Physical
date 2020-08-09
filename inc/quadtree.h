@@ -26,7 +26,7 @@ public:
     bool contain(Body* B);
     void subdivide();
 
-    std::vector <int>& query(std::vector<int> &V, Body* B);
+    void query(std::vector<int> &V, Body* B);
 
     void imguiDebug()
     {
@@ -78,6 +78,7 @@ private:
     std::vector <Point> m_data;
     std::vector <int> m_dataIdx;
 
+    // sfml debug
     sf::RectangleShape m_shape;
     sf::Color m_color;
 
